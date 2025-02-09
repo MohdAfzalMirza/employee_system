@@ -1,0 +1,61 @@
+name: demo
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  bloc:
+  flutter_bloc: ^8.0.0
+  intl: ^0.17.0
+  flutter_svg: ^2.0.17
+  sqflite: ^2.0.2
+  path_provider: ^2.0.10
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/svgs/
+    - lib/data/
+
+
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/outfit/Outfit-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/outfit/Outfit-Light.ttf
+          weight: 300
+        - asset: assets/fonts/outfit/Outfit-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/outfit/Outfit-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/outfit/Outfit-Bold.ttf
+          weight: 700
+
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/openSens/OpenSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/openSens/OpenSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/openSens/OpenSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/openSens/OpenSans-Bold.ttf
+          weight: 700
