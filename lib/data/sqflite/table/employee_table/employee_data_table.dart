@@ -1,28 +1,9 @@
-import 'package:demo/data/sqflite/database_helper.dart';
-import 'package:demo/model/employee_data_model.dart';
+import 'package:demo/data/hive/employee_data_model.dart';
+import 'package:hive/hive.dart';
 
-/// Table Name
-const kEmployeeTableName = "employee_table";
+const kEmployeeBox = "employee_table";
 
-/// Table column attributes
-const kEmployeeId = "id";
-const kEmployeeName = "employeeName";
-const kRole = "role";
-const kStartDate = "startDate";
-const kEndDate = "endDate";
-
-// Table creation command
 class EmployeeTableProvider {
-  static String createTableCMD = '''
-  CREATE TABLE $kEmployeeTableName (
-    $kEmployeeId INTEGER PRIMARY KEY AUTOINCREMENT, 
-    $kEmployeeName TEXT, 
-    $kRole TEXT, 
-    $kStartDate TEXT,
-    $kEndDate TEXT
-  )
-  ''';
-
   static final EmployeeTableProvider _instance =
       EmployeeTableProvider.internal();
 
@@ -30,53 +11,56 @@ class EmployeeTableProvider {
 
   EmployeeTableProvider.internal();
 
+  Box<EmployeeDBEntry>? _box; // Store the opened Hive box
+
+  /// Initialize Hive box (called only once)
+  Future<void> init() async {
+    _box = await Hive.openBox<EmployeeDBEntry>(kEmployeeBox);
+  }
+
+  /// Ensure box is opened before use
+  Future<Box<EmployeeDBEntry>> _openBox() async {
+    if (_box == null) {
+      await init();
+    }
+    return _box!;
+  }
+
   Future<int> insertEmpData(EmployeeDBEntry employeeData) async {
-    final dbClient = await DatabaseHelper().db;
-    int insertFlag =
-        await dbClient.insert(kEmployeeTableName, employeeData.toJson());
-    return insertFlag;
+    final box = await _openBox();
+    int id = (box.keys.isNotEmpty ? box.keys.last as int : 0) + 1;
+    employeeData.id = id;
+    await box.put(id, employeeData);
+    return id;
   }
 
   Future<List<EmployeeDBEntry>> getAllData() async {
-    final dbClient = await DatabaseHelper().db;
-    final res = await dbClient.query(kEmployeeTableName);
-    return res.map((e) => EmployeeDBEntry.fromJson(e)).toList();
+    final box = await _openBox();
+    return box.values.toList();
   }
 
   Future<int> getTotalNumberOfEntriesInDB() async {
-    final dbClient = await DatabaseHelper().db;
-    final res = await dbClient.query(kEmployeeTableName);
-    List<EmployeeDBEntry> mediaListInDB = [];
-    mediaListInDB = res.map((e) => EmployeeDBEntry.fromJson(e)).toList();
-    return mediaListInDB.length;
+    final box = await _openBox();
+    return box.length;
   }
 
   Future<EmployeeDBEntry?> getEmployeeEntry(int id) async {
-    final dbClient = await DatabaseHelper().db;
-    final res = await dbClient
-        .query(kEmployeeTableName, where: '$kEmployeeId = ?', whereArgs: [id]);
-    if (res.isNotEmpty) {
-      return EmployeeDBEntry.fromJson(res.first);
-    }
-    return null;
+    final box = await _openBox();
+    return box.get(id);
   }
 
   Future<void> deleteEmployeeEntry(int id) async {
-    final dbClient = await DatabaseHelper().db;
-    await dbClient
-        .delete(kEmployeeTableName, where: '$kEmployeeId = ?', whereArgs: [id]);
+    final box = await _openBox();
+    await box.delete(id);
   }
 
   Future<void> updateEmployeeEntry(EmployeeDBEntry empData) async {
-    final dbClient = await DatabaseHelper().db;
-    await dbClient.update(kEmployeeTableName, empData.toJson(),
-        where: '$kEmployeeId = ?', whereArgs: [empData.id]);
+    final box = await _openBox();
+    await box.put(empData.id, empData);
   }
 
-  /// Method to delete all entries from the table
   Future<void> deleteAllData() async {
-    final dbClient = await DatabaseHelper().db;
-    await dbClient.delete(kEmployeeTableName);
+    final box = await _openBox();
+    await box.clear();
   }
 }
-

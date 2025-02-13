@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:demo/data/hive/employee_data_model.dart';
 import 'package:demo/data/sqflite/table/employee_table/employee_data_table.dart';
-import 'package:demo/model/employee_data_model.dart';
 import 'package:demo/utils/logger.dart';
 import 'package:meta/meta.dart';
 
@@ -61,7 +61,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     try {
       emit(HomePageLoadingState());
       final res = await dbProvider.insertEmpData(event.employeeEntry);
-      if (res != null ) {
+      if (res != null) {
         add(FetchEmployeeDataEvent());
       } else {
         emit(HomePageFailedState());

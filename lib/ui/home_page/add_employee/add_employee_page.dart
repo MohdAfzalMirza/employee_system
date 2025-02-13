@@ -1,7 +1,7 @@
 import 'package:demo/constants/app_colors.dart';
 import 'package:demo/constants/app_strings.dart';
 import 'package:demo/constants/dimensions.dart';
-import 'package:demo/model/employee_data_model.dart';
+import 'package:demo/data/hive/employee_data_model.dart';
 import 'package:demo/theme/style.dart';
 import 'package:demo/ui/home_page/add_employee/add_employee_bloc/add_employee_bloc.dart';
 import 'package:demo/ui/home_page/add_employee/helper_widegts.dart';
@@ -94,8 +94,8 @@ class _AddEmployeePageState extends State<_AddEmployeePage> {
       id: widget.employeeDetails?.id,
       employeeName: _nameController.text,
       role: _selectedRole.value!.name,
-      startDate: _startDate.value,
-      endDate: _endDate.value,
+      startDate: _startDate.value!,
+      endDate: _endDate.value!,
     );
 
     final previousDetails = widget.employeeDetails;
@@ -227,37 +227,40 @@ class _AddEmployeePageState extends State<_AddEmployeePage> {
           ),
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(px_16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(px_8),
+      bottomSheet: ConstrainedBox(
+        constraints: const BoxConstraints(
+            minWidth: double.infinity, maxWidth: double.infinity),
+        child: Padding(
+          padding: const EdgeInsets.all(px_16),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(px_8),
+                  ),
+                  backgroundColor: Colors.indigo[50],
+                  foregroundColor: Colors.blue,
                 ),
-                backgroundColor: Colors.indigo[50],
-                foregroundColor: Colors.blue,
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text(AppStrings.kCancel),
               ),
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text(AppStrings.kCancel),
-            ),
-            const SizedBox(width: px_8),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(px_8),
+              const SizedBox(width: px_8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(px_8),
+                  ),
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
                 ),
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
+                onPressed: _onSave,
+                child: const Text(AppStrings.kSave),
               ),
-              onPressed: _onSave,
-              child: const Text(
-                AppStrings.kSave,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

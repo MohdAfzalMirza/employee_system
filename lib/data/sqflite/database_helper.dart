@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:demo/data/sqflite/table/employee_table/employee_data_table.dart';
+
 import 'package:demo/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,7 +35,7 @@ class DatabaseHelper {
 
   /// Increase Migration key by 1 and Add Migration Script as Value
   final Map<int, String> migrationScripts = {
-    1: EmployeeTableProvider.createTableCMD,
+    // 1: EmployeeTableProvider.createTableCMD,
   };
 
   FutureOr<Database> get db async {

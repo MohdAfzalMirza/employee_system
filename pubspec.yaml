@@ -6,7 +6,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: '>=2.16.2 <4.0.0' # Adjust if you have a different SDK version
+
 dependencies:
   flutter:
     sdk: flutter
@@ -17,10 +18,14 @@ dependencies:
   flutter_svg: ^2.0.17
   sqflite: ^2.0.2
   path_provider: ^2.0.10
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 
 dev_dependencies:
+  hive_generator: ^2.0.0
+  build_runner: ^2.4.6
   flutter_test:
     sdk: flutter
 

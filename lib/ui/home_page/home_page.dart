@@ -2,7 +2,7 @@ import 'package:demo/constants/app_colors.dart';
 import 'package:demo/constants/app_strings.dart';
 import 'package:demo/constants/constant_assets.dart';
 import 'package:demo/constants/dimensions.dart';
-import 'package:demo/model/employee_data_model.dart';
+import 'package:demo/data/hive/employee_data_model.dart';
 import 'package:demo/theme/style.dart';
 import 'package:demo/ui/home_page/add_employee/add_employee_page.dart';
 import 'package:demo/ui/home_page/bloc/home_page_bloc.dart';
@@ -37,7 +37,8 @@ class _HomePage extends StatelessWidget {
         backgroundColor: AppColors.kBlueBg,
         title: Text(
           AppStrings.kEmployeeList,
-          style: context.textTheme.headline6Regular.copyWith(color: AppColors.white),
+          style: context.textTheme.headline6Regular
+              .copyWith(color: AppColors.white),
         ),
       ),
       body: SafeArea(
@@ -76,7 +77,8 @@ class _HomePage extends StatelessWidget {
                   int adjustedIndex = index - (hasCurrentEmployees ? 1 : 0);
 
                   if (adjustedIndex < currentEmployees.length) {
-                    return _buildEmployeeTile(context, currentEmployees[adjustedIndex]);
+                    return _buildEmployeeTile(
+                        context, currentEmployees[adjustedIndex]);
                   }
 
                   adjustedIndex -= currentEmployees.length;
@@ -84,10 +86,12 @@ class _HomePage extends StatelessWidget {
                     return _buildSectionHeader(AppStrings.kPreviousEmployees);
                   }
 
-                  int prevIndex = adjustedIndex - (hasPreviousEmployees ? 1 : 0);
+                  int prevIndex =
+                      adjustedIndex - (hasPreviousEmployees ? 1 : 0);
 
                   if (prevIndex >= 0 && prevIndex < previousEmployees.length) {
-                    return _buildEmployeeTile(context, previousEmployees[prevIndex]);
+                    return _buildEmployeeTile(
+                        context, previousEmployees[prevIndex]);
                   }
 
                   return const SizedBox();
@@ -97,7 +101,8 @@ class _HomePage extends StatelessWidget {
               return Center(
                 child: Text(
                   AppStrings.kSomethingWentWrong,
-                  style: context.textTheme.headline6Bold.copyWith(color: AppColors.warning500),
+                  style: context.textTheme.headline6Bold
+                      .copyWith(color: AppColors.warning500),
                 ),
               );
             }
@@ -110,7 +115,8 @@ class _HomePage extends StatelessWidget {
               context, AddEmployeePage.routeName,
               arguments: UpdateEmployeePageArg());
           if (needRefresh != null && needRefresh is bool && needRefresh) {
-            BlocProvider.of<HomePageBloc>(context).add(FetchEmployeeDataEvent());
+            BlocProvider.of<HomePageBloc>(context)
+                .add(FetchEmployeeDataEvent());
           }
         },
         backgroundColor: AppColors.kBlueBg,
@@ -146,7 +152,8 @@ class _HomePage extends StatelessWidget {
             action: SnackBarAction(
               label: AppStrings.kUndo,
               onPressed: () {
-                homePageBloc.add(UndoSaveEmployeeDataEvent(employeeEntry: employee));
+                homePageBloc
+                    .add(UndoSaveEmployeeDataEvent(employeeEntry: employee));
               },
             ),
           ),
@@ -155,7 +162,8 @@ class _HomePage extends StatelessWidget {
       child: ListTile(
         title: Text(employee.employeeName),
         subtitle: Text(employee.role),
-        trailing: Text(DateFormat(AppStrings.kDateFormat).format(employee.startDate!)),
+        trailing: Text(
+            DateFormat(AppStrings.kDateFormat).format(employee.startDate!)),
       ).ripple(onPressed: () async {
         UpdateEmployeePageArg arg = UpdateEmployeePageArg(
           isEditMode: true,

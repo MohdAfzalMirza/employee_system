@@ -2,10 +2,19 @@ import 'package:demo/constants/app_strings.dart';
 import 'package:demo/ui/home_page/home_page.dart';
 import 'package:demo/utils/navigate_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+
+import 'data/hive/employee_data_model.dart';
 final GlobalKey<NavigatorState> appNavigatorKey =
 GlobalKey<NavigatorState>();
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(EmployeeDBEntryAdapter());
+
   runApp(const MyApp());
 }
 

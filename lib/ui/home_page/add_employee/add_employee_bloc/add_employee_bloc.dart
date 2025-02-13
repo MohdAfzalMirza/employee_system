@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:demo/constants/app_strings.dart';
+import 'package:demo/data/hive/employee_data_model.dart';
 import 'package:demo/data/sqflite/table/employee_table/employee_data_table.dart';
-import 'package:demo/model/employee_data_model.dart';
 import 'package:demo/utils/logger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'add_employee_event.dart';
-
 part 'add_employee_state.dart';
 
 ///this block is responsible for
